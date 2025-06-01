@@ -1,23 +1,20 @@
 <template>
   <div>
     <nav class="top-nav">
-      <div class="nav-container">
-        <router-link to="/" class="nav-logo">
-          <img src="../assets/logo.jpg" alt="聞水而知 Logo" class="nav-logo-img">
+      <div class="nav-container">        <router-link to="/" class="nav-logo">
+          <img :src="logoImg" alt="聞水而知 Logo" class="nav-logo-img">
           聞水而知
         </router-link>
         <button class="nav-toggle" @click="toggleNav" :class="{ active: isNavActive }" aria-label="Toggle navigation" :aria-expanded="isNavActive">
           <span></span>
           <span></span>
           <span></span>
-        </button>
-        <ul class="nav-menu" :class="{ active: isNavActive }">
-          <li><a href="/#concept" @click="isNavActive = false">展覽概念</a></li>
-          <li class="dropdown-item" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-            <a href="#themes" class="dropdown-trigger">
+        </button>        <ul class="nav-menu" :class="{ active: isNavActive }">
+          <li><a @click.prevent="navigateToHome('concept')">展覽概念</a></li>
+          <li class="dropdown-item" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">            <a class="dropdown-trigger" @click.prevent>
               主題介紹<span class="dropdown-arrow">▼</span>
             </a>
-            <ul class="dropdown-menu" :class="{ show: showDropdown }">              
+            <ul class="dropdown-menu" :class="{ show: showDropdown }">
               <li>
                 <router-link to="/zone-pollution" @click.native="showDropdown = false; isNavActive = false">缺水與污染場域</router-link>
               </li>
@@ -29,8 +26,8 @@
               </li>
             </ul>
           </li>
-          <li><a href="/#info" @click="isNavActive = false">參觀資訊</a></li>
-          <li><router-link to="/about-us" @click="isNavActive = false">關於我們</router-link></li>
+          <li><a @click.prevent="navigateToHome('info')">參觀資訊</a></li>
+          <li><router-link to="/about-us" @click.native="isNavActive = false">關於我們</router-link></li>
         </ul>
       </div>
     </nav>
@@ -53,7 +50,7 @@
           <div class="members-row top-row">
             <div class="member-card">
               <div class="member-avatar-container">
-                <img src="../assets/Avatar1.jpg" alt="練書睿" class="member-avatar">
+                <img :src="avatar1Img" alt="練書睿" class="member-avatar">
               </div>
               <div class="member-info">
                 <h4 class="member-name">練書睿</h4>
@@ -64,7 +61,7 @@
             
             <div class="member-card">
               <div class="member-avatar-container">
-                <img src="../assets/Avatar2.jpg" alt="陳彥廷" class="member-avatar">
+                <img :src="avatar2Img" alt="陳彥廷" class="member-avatar">
               </div>
               <div class="member-info">
                 <h4 class="member-name">陳彥廷</h4>
@@ -77,18 +74,18 @@
           <div class="members-row bottom-row">
             <div class="member-card">
               <div class="member-avatar-container">
-                <img src="../assets/Avatar2.jpg" alt="林亭汝" class="member-avatar">
+                <img :src="avatar3Img" alt="林亭汝" class="member-avatar">
               </div>
               <div class="member-info">
                 <h4 class="member-name">林亭汝</h4>
                 <p class="member-role">企劃發想</p>
-                <p class="member-desc">展覽核心概念與主題策劃者，擅長將環保理念轉化為具創意的展覽企劃。</p>
+                <p class="member-desc">展覽核心概念與主題策劃者，將環保理念轉化為具創意的展覽企劃。</p>
               </div>
             </div>
             
             <div class="member-card">
               <div class="member-avatar-container">
-                <img src="../assets/Avatar2.jpg" alt="王若妍" class="member-avatar">
+                <img :src="avatar5Img" alt="王若妍" class="member-avatar">
               </div>
               <div class="member-info">
                 <h4 class="member-name">王若妍</h4>
@@ -99,7 +96,7 @@
             
             <div class="member-card">
               <div class="member-avatar-container">
-                <img src="../assets/Avatar2.jpg" alt="劉芯妤" class="member-avatar">
+                <img :src="avatar4Img" alt="劉芯妤" class="member-avatar">
               </div>
               <div class="member-info">
                 <h4 class="member-name">劉芯妤</h4>
@@ -135,16 +132,32 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+// 導入圖片資源
+import logoImg from '../assets/logo.jpg'
+import avatar1Img from '../assets/Avatar1.jpg'
+import avatar2Img from '../assets/Avatar2.jpg'
+import avatar3Img from '../assets/Avatar3.jpg'
+import avatar4Img from '../assets/Avatar4.jpg'
+import avatar5Img from '../assets/Avatar5.jpg'
+
 gsap.registerPlugin(ScrollTrigger)
 
+const router = useRouter()
 const isNavActive = ref(false)
 const showDropdown = ref(false)
 
 const toggleNav = () => {
   isNavActive.value = !isNavActive.value
+}
+
+const navigateToHome = (anchor) => {
+  isNavActive.value = false
+  // 使用 router 導航到首頁並帶上 hash
+  router.push({ path: '/', hash: `#${anchor}` })
 }
 
 onMounted(() => {

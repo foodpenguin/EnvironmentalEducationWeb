@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Homepage from './components/Homepage.vue'
 import ZonePollution from './components/ZonePollution.vue'
 import ZoneClean from './components/ZoneClean.vue'
@@ -14,8 +14,24 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory('/EnvironmentalEducationWeb/'),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 如果有錨點，滾動到該元素
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+        top: 80 // 為導航列預留空間
+      }
+    }
+    // 如果有儲存的位置，回到該位置
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 否則滾動到頂部
+    return { top: 0 }
+  }
 })
 
 export default router

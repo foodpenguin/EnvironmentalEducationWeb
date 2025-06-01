@@ -3,7 +3,7 @@
     <nav class="top-nav">
       <div class="nav-container">
         <router-link to="/" class="nav-logo">
-          <img src="../assets/logo.jpg" alt="聞水而知 Logo" class="nav-logo-img">
+          <img :src="logoImg" alt="聞水而知 Logo" class="nav-logo-img">
           聞水而知
         </router-link>
         <button class="nav-toggle" @click="toggleNav" :class="{ active: isNavActive }" aria-label="Toggle navigation" :aria-expanded="isNavActive">
@@ -12,9 +12,9 @@
           <span></span>
         </button>
         <ul class="nav-menu" :class="{ active: isNavActive }">
-          <li><a href="#concept">展覽概念</a></li>
+          <li><a @click.prevent="scrollToSection('concept')">展覽概念</a></li>
           <li class="dropdown-item" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-            <a href="#themes" class="dropdown-trigger">
+            <a class="dropdown-trigger" @click.prevent>
               主題介紹<span class="dropdown-arrow">▼</span>
             </a>
             <ul class="dropdown-menu" :class="{ show: showDropdown }">
@@ -29,8 +29,8 @@
               </li>
             </ul>
           </li>
-          <li><a href="#info">參觀資訊</a></li>
-          <li><router-link to="/about-us">關於我們</router-link></li>
+          <li><a @click.prevent="scrollToSection('info')">參觀資訊</a></li>
+          <li><router-link to="/about-us" @click.native="isNavActive = false">關於我們</router-link></li>
         </ul>
       </div>
     </nav>
@@ -273,6 +273,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import floatingElement1 from '../assets/floating_element_1.png'
 import floatingElement2 from '../assets/floating_element_2.png'
 import floatingKoi1 from '../assets/floating_koi_1.png'
+import logoImg from '../assets/logo.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -287,6 +288,18 @@ const toggleNav = () => {
 
 const toggleFAQ = () => {
   showFAQ.value = !showFAQ.value
+}
+
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start',
+      inline: 'nearest'
+    })
+  }
+  isNavActive.value = false // 關閉手機版選單
 }
 
 const scrollToTheme = (themeId) => {
@@ -1049,44 +1062,276 @@ footer > p {
 }
 
 @media (max-width: 480px) {
+  body {
+    padding-top: 60px; /* 調整導覽列高度 */
+  }
+  
+  .banner {
+    min-height: 400px;
+    padding: 0 1rem;
+    height: calc(100vh - 60px);
+    max-height: 500px;
+  }
+  
   .info-box {
     max-width: 100% !important;
-    padding: 1.8rem 1.8rem 2rem 1.8rem !important;
-    border-radius: 18px !important;
+    padding: 1.5rem 1.5rem 1.8rem 1.5rem !important;
+    border-radius: 16px !important;
+    margin: 0 0.5rem;
   }
   
   .info-box .main-title {
-    font-size: 2.2rem !important;
+    font-size: 2rem !important;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+  
+  .info-box .course-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .features-list {
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+  }
+  
+  .feature-item {
+    padding: 0.7rem 1rem;
+    min-height: 48px; /* 觸控友好的最小尺寸 */
+    border-radius: 10px;
+  }
+  
+  .feature-item .list-icon {
+    font-size: 1.3rem;
+  }
+  
+  .feature-item span:last-child {
+    font-size: 1rem;
+  }
+  
+  .cta-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-height: 48px; /* 觸控友好的最小尺寸 */
+    margin-top: 1.5rem;
+  }
+  
+  /* 區段優化 */
+  .features-section,
+  .themes-section,
+  .cta-section,
+  .info-section {
+    padding: 2.5rem 1rem;
+  }
+  
+  .section-title {
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+  
+  .section-title h2 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+  }
+  
+  .section-title p {
+    font-size: 1rem;
+    line-height: 1.5;
   }
   
   .cta-section .section-title h2 {
+    font-size: 1.7rem;
+  }
+  
+  /* 特色網格優化 */
+  .features-grid {
+    gap: 1.2rem;
+    grid-template-columns: 1fr; /* 單欄佈局 */
+  }
+  
+  .feature-card {
+    padding: 1.5rem 1.2rem;
+    min-height: auto;
+  }
+  
+  .feature-card .icon {
+    width: 50px;
+    height: 50px;
     font-size: 1.8rem;
   }
   
+  .feature-card h3 {
+    font-size: 1.2rem;
+    margin: 1rem 0 0.8rem;
+  }
+  
+  .feature-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* 主題網格優化 */
+  .themes-grid {
+    gap: 1.5rem;
+    grid-template-columns: 1fr; /* 單欄佈局 */
+  }
+  
+  .theme-card {
+    border-radius: 16px;
+  }
+  
   .theme-image {
-    height: 80px;
+    height: 100px;
   }
-
-  .features-grid {
-    gap: 1.5rem; 
+  
+  .theme-emoji {
+    font-size: 3rem;
   }
-
+  
+  .theme-content {
+    padding: 1.5rem;
+  }
+  
+  .theme-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .theme-tagline {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .theme-content p:last-of-type {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+  }
+  
+  .highlight-tag {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+  }
+  
+  /* 概念卡片優化 */
+  .concept-text-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .concept-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .concept-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .concept-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .concept-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* 資訊網格優化 */
   .info-grid {
-    gap: 1.5rem; 
+    gap: 1.2rem;
+    grid-template-columns: 1fr;
   }
-
+  
+  .info-card {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+  
+  .info-card .icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
+  }
+  
+  .info-card h3 {
+    font-size: 1.2rem;
+    margin: 1rem 0 0.8rem;
+  }
+  
+  .info-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* FAQ 優化 */
   .faq-section {
-    margin-top: 3rem; 
+    margin-top: 2.5rem;
+    padding: 2.5rem 1rem;
   }
-
-  .banner {
-    min-height: 450px;
-    padding: 0 0.5rem;
+  
+  .faq-item {
+    margin-bottom: 1rem;
   }
-
+  
+  .faq-question {
+    font-size: 1.05rem;
+    padding: 1rem;
+    min-height: 48px; /* 觸控友好 */
+  }
+  
+  .faq-answer {
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* 浮動元素優化 */
   .floating-elements {
-    /* 在小螢幕上減少浮動元素的複雜度 */
-    opacity: 0.7;
+    opacity: 0.6; /* 減少視覺干擾 */
+  }
+  
+  /* 隱藏複雜的浮動元素 */
+  #float-ink1,
+  #float-ink2 {
+    display: none;
+  }
+  
+  /* 調整剩餘浮動元素大小 */
+  #float-blossom1,
+  #float-blossom2,
+  #float-blossom3 {
+    width: 30px;
+  }
+  
+  #float-koi1 {
+    width: 60px;
+  }
+  
+  /* 確保觸控目標足夠大 */
+  button,
+  a,
+  .nav-toggle,
+  .theme-card,
+  .feature-card,
+  .info-card {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 防止文字選取干擾觸控 */
+  .theme-card,
+  .feature-card,
+  .info-card,
+  .faq-question {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 

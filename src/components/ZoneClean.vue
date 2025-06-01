@@ -1,20 +1,17 @@
 <template>
   <div>
     <nav class="top-nav">
-      <div class="nav-container">
-        <router-link to="/" class="nav-logo">
-          <img src="../assets/logo.jpg" alt="聞水而知 Logo" class="nav-logo-img">
+      <div class="nav-container">        <router-link to="/" class="nav-logo">
+          <img :src="logoImg" alt="聞水而知 Logo" class="nav-logo-img">
           聞水而知
         </router-link>
         <button class="nav-toggle" @click="toggleNav" :class="{ active: isNavActive }" aria-label="Toggle navigation" :aria-expanded="isNavActive">
           <span></span>
           <span></span>
           <span></span>
-        </button>
-        <ul class="nav-menu" :class="{ active: isNavActive }">
-          <li><a href="/#concept" @click="isNavActive = false">展覽概念</a></li>
-          <li class="dropdown-item" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-            <a href="#themes" class="dropdown-trigger">
+        </button>        <ul class="nav-menu" :class="{ active: isNavActive }">
+          <li><a @click.prevent="navigateToHome('concept')">展覽概念</a></li>
+          <li class="dropdown-item" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">            <a class="dropdown-trigger" @click.prevent>
               主題介紹<span class="dropdown-arrow">▼</span>
             </a>
             <ul class="dropdown-menu" :class="{ show: showDropdown }">              <li>
@@ -27,7 +24,7 @@
                 <router-link to="/zone-interactive" @click.native="showDropdown = false; isNavActive = false">氣味互動創作</router-link>
               </li>
             </ul>
-          </li>          <li><a href="/#info" @click="isNavActive = false">參觀資訊</a></li>
+          </li>          <li><a @click.prevent="navigateToHome('info')">參觀資訊</a></li>
           <li><router-link to="/about-us" @click.native="isNavActive = false">關於我們</router-link></li>
         </ul>
       </div>
@@ -203,16 +200,27 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+// 導入圖片資源
+import logoImg from '../assets/logo.jpg'
+
 gsap.registerPlugin(ScrollTrigger)
 
+const router = useRouter()
 const isNavActive = ref(false)
 const showDropdown = ref(false)
 
 const toggleNav = () => {
   isNavActive.value = !isNavActive.value
+}
+
+const navigateToHome = (anchor) => {
+  isNavActive.value = false
+  // 使用 router 導航到首頁並帶上 hash
+  router.push({ path: '/', hash: `#${anchor}` })
 }
 
 const scrollToTheme = (themeId) => {
@@ -796,32 +804,142 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
+  .zone-wrapper {
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+  }
+  
   .zone-section {
     padding: 1.5rem 1rem 2.5rem;
   }
   
-  .zone-row {
-    padding: 1.5rem 1.2rem;
+  .section-title {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 16px;
   }
   
   .section-title h2 {
     font-size: 1.6rem;
+    line-height: 1.3;
   }
   
   .section-title p {
     font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .zone-content {
+    gap: 1.5rem;
+  }
+  
+  .zone-row {
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .zone-block-title {
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 1.2rem;
+  }
+  
+  .zone-block-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .smell-list {
+    gap: 1.5rem;
+  }
+  
+  .smell-card {
+    border-radius: 12px;
+    /* 確保觸控友好的目標大小 */
+    min-height: 48px;
   }
   
   .smell-card-header {
-    padding: 0.8rem 1.2rem;
+    padding: 1rem 1.2rem;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    /* 觸控友好的最小高度 */
+    min-height: 60px;
+  }
+  
+  .smell-card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
   }
   
   .smell-card-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    width: 100%;
+    line-height: 1.3;
   }
   
   .smell-card-body {
     padding: 1.2rem;
+    gap: 1rem;
+  }
+  
+  .smell-card-desc p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: left;
+  }
+  
+  .zone-image-placeholder {
+    height: 120px;
+    border-radius: 8px;
+  }
+  
+  .zone-image-placeholder.small {
+    width: 100%;
+    height: 100px;
+    max-width: 200px;
+  }
+  
+  .img-icon {
+    font-size: 1.5rem;
+  }
+  
+  .img-tip {
+    font-size: 0.75rem;
+    text-align: center;
+    line-height: 1.3;
+  }
+  
+  /* 觸控優化 */
+  .smell-card {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* 防止卡片在小螢幕上過度縮放 */
+  .smell-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .zone-row:hover {
+    transform: translateY(-3px) scale(1.005);
+  }
+  
+  /* 確保在小螢幕上有足夠的間距 */
+  .zone-row:last-child {
+    margin-bottom: 2rem;
+  }
+  
+  /* 優化文字可讀性 */
+  .smell-card-desc p {
+    word-wrap: break-word;
+    hyphens: auto;
   }
 }
 </style>

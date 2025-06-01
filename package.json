@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "gsap": "^3.13.0",
@@ -23,5 +23,5 @@
     "prettier": "^3.5.3",
     "vite": "^6.3.5"
   },
-  "homepage": "https://你的GitHub帳號.github.io/EnvironmentalEducationWeb/"
+  "homepage": "https://foodpenguin.github.io/EnvironmentalEducationWeb/"
 }

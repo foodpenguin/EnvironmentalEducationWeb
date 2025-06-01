@@ -399,7 +399,8 @@ a:focus, button:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('banner_art_placeholder.png'); /* 更新的預留位置圖片名稱 */
+  /* 使用漸變背景替代圖片 */
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 25%, #90caf9 50%, #64b5f6 75%, #42a5f5 100%);
   background-size: cover;
   background-position: center;
   z-index: 1;
@@ -950,4 +951,87 @@ a:focus, button:focus {
   font-weight: 500;
   font-size: 1.1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 額外的小螢幕優化 (320px - 360px) */
+@media (max-width: 360px) {
+  :root {
+    --nav-height: 60px; /* 在極小螢幕上減少導覽列高度 */
+  }
+  
+  body {
+    font-size: 14px;
+    padding-top: 60px;
+  }
+  
+  .nav-container {
+    height: 60px !important;
+    width: 95% !important;
+    padding: 0 0.5rem;
+  }
+  
+  .nav-logo {
+    font-size: 1.3rem !important;
+  }
+  
+  .nav-logo-img {
+    height: 35px !important;
+    width: 35px !important;
+  }
+  
+  .nav-toggle {
+    margin-right: 0.5rem;
+  }
+  
+  .nav-menu {
+    top: 60px;
+    height: calc(100vh - 60px);
+    padding-top: 2rem;
+    gap: 1.8rem;
+  }
+  
+  .nav-menu li a {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .dropdown-menu li a {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  
+  /* 優化觸控目標 */
+  button,
+  a[role="button"],
+  .nav-toggle,
+  .cta-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 文字可讀性優化 */
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.2rem; }
+  
+  /* 間距優化 */
+  .banner {
+    min-height: 350px;
+    padding: 0 0.5rem;
+  }
+  
+  .info-box {
+    padding: 1.2rem !important;
+    margin: 0 0.5rem;
+  }
+  
+  .info-box .main-title {
+    font-size: 1.8rem !important;
+  }
+  
+  /* 確保內容不會太擠 */
+  section {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
 }
